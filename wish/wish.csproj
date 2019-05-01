@@ -67,8 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="controllers\BLE.cs" />
-    <Compile Include="controllers\Notify.cs" />
-    <Compile Include="controllers\Program.cs" />
+    <Compile Include="controllers\NotifyProgram.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -97,7 +96,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wish.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.5.0.0\build\Fody.targets" Condition="Exists('..\packages\Fody.5.0.0\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

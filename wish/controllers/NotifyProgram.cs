@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -8,18 +9,17 @@ using System.Windows.Forms;
 
 namespace wish {
 
-  public sealed class Notify {
+  public sealed class NotifyProgram {
     private NotifyIcon notifyIcon;
     private ContextMenu notificationMenu;
 
     #region Initialize icon and menu
-    public Notify() {
+    public NotifyProgram() {
       notifyIcon = new NotifyIcon();
       notificationMenu = new ContextMenu(InitializeMenu());
 
       notifyIcon.DoubleClick += IconDoubleClick;
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Notify));
-      //notifyIcon.Icon = (Icon)resources.GetObject("$this.Icon");
+      notifyIcon.Icon = Properties.Resources.wish;
       notifyIcon.ContextMenu = notificationMenu;
     }
 
@@ -34,15 +34,14 @@ namespace wish {
 
     #region main
     [STAThread]
-    public static void Main2(string[] args) {
+    public static void Main(string[] args) {
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
 
       bool isFirstInstance;
-      // Please use a unique name for the mutex to prevent conflicts with other programs
       using (Mutex mtx = new Mutex(true, "notify", out isFirstInstance)) {
         if (isFirstInstance) {
-          var notificationIcon = new Notify();
+          var notificationIcon = new NotifyProgram();
           notificationIcon.notifyIcon.Visible = true;
           Application.Run();
           notificationIcon.notifyIcon.Dispose();
@@ -52,7 +51,7 @@ namespace wish {
         }
       } // releases the Mutex
     }
-#endregion
+    #endregion
 
     #region Event Handlers
     private void menuAboutClick(object sender, EventArgs e) {
