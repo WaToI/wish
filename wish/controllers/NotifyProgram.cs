@@ -63,7 +63,9 @@ namespace wish {
     }
 
     private void IconDoubleClick(object sender, EventArgs e) {
-      MessageBox.Show("The icon was double clicked");
+      var wind = new TransparentWindow();
+      wind.Topmost = true;
+      wind.Show();
     }
     #endregion
   }
