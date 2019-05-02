@@ -11,7 +11,7 @@ using Microsoft.WindowsAPICodePack.Taskbar;
 namespace wish {
 
   public sealed class NotifyProgram {
-    readonly string appId = "WaTo.Wish";
+    readonly string appId = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
     NotifyIcon notifyIcon;
     ContextMenu notificationMenu;
 
