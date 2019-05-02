@@ -6,15 +6,26 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace wish {
 
   public sealed class NotifyProgram {
-    private NotifyIcon notifyIcon;
-    private ContextMenu notificationMenu;
+    readonly string appId = "WaTo.Wish";
+    NotifyIcon notifyIcon;
+    ContextMenu notificationMenu;
+
+    public NotifyProgram() {
+      setAppId();
+      initNotifyProgram();
+    }
+
+    void setAppId() {
+      TaskbarManager.Instance.ApplicationId = appId;
+    }
 
     #region Initialize icon and menu
-    public NotifyProgram() {
+    void initNotifyProgram() {
       notifyIcon = new NotifyIcon();
       notificationMenu = new ContextMenu(InitializeMenu());
 
@@ -23,7 +34,7 @@ namespace wish {
       notifyIcon.ContextMenu = notificationMenu;
     }
 
-    private MenuItem[] InitializeMenu() {
+    MenuItem[] InitializeMenu() {
       MenuItem[] menu = new MenuItem[] {
         new MenuItem("About", menuAboutClick),
         new MenuItem("Exit", menuExitClick)
@@ -38,6 +49,7 @@ namespace wish {
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
 
+      #region mutex
       bool isFirstInstance;
       using (Mutex mtx = new Mutex(true, "notify", out isFirstInstance)) {
         if (isFirstInstance) {
@@ -50,12 +62,14 @@ namespace wish {
           // TODO: Display message box or change focus to existing application instance
         }
       } // releases the Mutex
+      #endregion
     }
     #endregion
 
     #region Event Handlers
     private void menuAboutClick(object sender, EventArgs e) {
-      MessageBox.Show("About This Application");
+      Toaster toaster = new Toaster();
+      toaster.showToast();
     }
 
     private void menuExitClick(object sender, EventArgs e) {
