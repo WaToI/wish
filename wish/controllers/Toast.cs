@@ -50,15 +50,13 @@ namespace wish {
     }
 
     public bool TryCreateShortcut() {
-      String shortcutPath = System.IO.Path.Combine(
-          Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-          $@"Microsoft\Windows\Start Menu\Programs\{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.lnk");
+      var myExeFi = new FileInfo(Process.GetCurrentProcess().MainModule.FileName);
+      var startupLinkFi = new FileInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\Microsoft\Windows\Start Menu\Programs\{myExeFi.Name.Replace(myExeFi.Extension, ".lnk")}");
 
-      if (File.Exists(shortcutPath)) {
-        File.Delete(shortcutPath);
+      if (startupLinkFi.Exists) {
+        startupLinkFi.Delete();
       }
-
-      InstallShortcut(shortcutPath);
+      InstallShortcut(startupLinkFi.FullName);
 
       return true;
     }
@@ -74,8 +72,7 @@ namespace wish {
       ErrorHelper.VerifySucceeded(newShortcut.SetArguments(""));
 
       //Add icon to shortcut
-      //if (ICON_LOCATION != string.Empty && File.Exists(ICON_LOCATION))
-      //  ShellHelper.ErrorHelper.VerifySucceeded(newShortcut.SetIconLocation(ICON_LOCATION, 0));
+      ErrorHelper.VerifySucceeded(newShortcut.SetIconLocation(exePath, 0));
 
       // Open the shortcut property store, set the AppUserModelId property
       IPropertyStore newShortcutProperties = (IPropertyStore)newShortcut;
